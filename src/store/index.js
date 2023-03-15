@@ -3,7 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     route:null,
-    cart:[],
+    cart:null,
     cartCount:0
     
   },
@@ -13,8 +13,8 @@ export default createStore({
     updateCount(state,count){
       state.cartCount = count;
     },
-    addToCart(state, item) {
-      state.cart.push(item);
+    addToCart(state, cart) {
+      state.cart = cart;
     },
     removeLastFromCart(state) {
       state.cart.pop();

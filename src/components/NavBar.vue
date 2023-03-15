@@ -1,5 +1,4 @@
 <template>
-
   <nav class="navbar navbar-expand-lg bg-opacity-25 fixed-top pt-1" style="background:#2c3e50;">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><h2>Tindo</h2></a>
@@ -26,7 +25,7 @@
           <RouterLink :to="{name:'auth'}" class="nav-link">Login|Register</RouterLink>
         </span>
         <span class="pt-2 mx-3">
-        <a href="#portfolio"><i style="font-size: 2em;" class="bx bxs-cart"></i><span style="
+        <a href="#portfolio" data-bs-toggle="modal" data-bs-target="#exampleModal"><i style="font-size: 2em;" class="bx bxs-cart"></i><span style="
   position: relative;
   top: -10px;
   right: 10px;
@@ -44,6 +43,7 @@ lblCartCount
       </div>
     </div>
   </nav>
+  <Cart />
 
 <!--  <div>-->
 <!--    <header id="header" class="fixed-top d-flex align-items-center header-scrolled">-->
@@ -82,9 +82,11 @@ lblCartCount
 
 
 import store from "@/store";
+import Cart from "@/components/Cart.vue";
 
 export default {
   name: 'NavBar',
+  components: {Cart},
   data(){
     return {
       cartQuantity:0
@@ -93,8 +95,10 @@ export default {
   created() {
     if(!localStorage.getItem('cartTindo')) {
       localStorage.setItem('cartTindo',JSON.stringify([]));
-    }
 
+    }
+    store.commit('addToCart',JSON.parse(localStorage.getItem('cartTindo')));
+    // console.log(state.cart);
   },
   mounted() {
     this.getCartAmount();

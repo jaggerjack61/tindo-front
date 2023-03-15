@@ -15,7 +15,7 @@
 
               <img class="card-img-top" :src="painting.src" style="width:100%;height:300px;object-fit:cover;" alt="image">
               <div class="card-img-overlay d-flex justify-content-end">
-                <a style="height: fit-content" @click="addToCart(painting.name, painting.src)"  data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 2em;color:#00b3ff" class="bx bx-cart-add"></i></a>
+                <a style="height: fit-content" @click="addToCart(painting.name, painting.src, painting.id,painting.price)"  data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 2em;color:#00b3ff" class="bx bx-cart-add"></i></a>
                 <a style="height: fit-content" :href="painting.src" class="details-link m-1 bg-white bg-opacity-75 rounded" title="More Details"><i style="font-size: 2em;color: #343b40" class="bx bx-window-open"></i></a>
               </div>
               <div class="card-body bg-white">
@@ -56,10 +56,10 @@ export default {
     return {
       msg:"hie",
       paintings:[
-        {name:'Sunset', description: 'Abstract Sunset',src:'assets/img/gallery/1.png'},
-        {name:'Vase in the void', description: 'Painting of a vase',src:'assets/img/gallery/2.png'},
-        {name:'Born to be Together', description: 'Painting of Love',src:'assets/img/gallery/3.png'},
-        {name:'Deadly Flowers', description: 'Flowers that kill',src:'assets/img/gallery/4.png'}
+        {name:'Sunset', description: 'Abstract Sunset',src:'assets/img/gallery/1.png', id:1, price:99.99},
+        {name:'Vase in the void', description: 'Painting of a vase',src:'assets/img/gallery/2.png', id:2, price:299.99},
+        {name:'Born to be Together', description: 'Painting of Love',src:'assets/img/gallery/3.png', id:3, price:59.99},
+        {name:'Deadly Flowers', description: 'Flowers that kill',src:'assets/img/gallery/4.png', id:4, price:80.00}
       ],
       count:1
     }
@@ -74,11 +74,12 @@ export default {
       element.scrollIntoView();
 
     },
-    addToCart(name, src) {
+    addToCart(name, src, id,price) {
       let cart = JSON.parse(localStorage.getItem('cartTindo'));
-      cart.push({name:name, src:src});
+      cart.push({name:name, src:src, id:id, price:price});
       localStorage.setItem('cartTindo',JSON.stringify(cart));
       store.commit('updateCount',cart.length);
+      store.commit('addToCart',cart)
 
     }
   }
