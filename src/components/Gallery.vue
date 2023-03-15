@@ -15,7 +15,7 @@
 
               <img class="card-img-top" :src="painting.src" style="width:100%;height:300px;object-fit:cover;" alt="image">
               <div class="card-img-overlay d-flex justify-content-end">
-                <a style="height: fit-content"  data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 2em;color:#00b3ff" class="bx bx-cart-add"></i></a>
+                <a style="height: fit-content" @click="addToCart(painting.name, painting.src)"  data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 2em;color:#00b3ff" class="bx bx-cart-add"></i></a>
                 <a style="height: fit-content" :href="painting.src" class="details-link m-1 bg-white bg-opacity-75 rounded" title="More Details"><i style="font-size: 2em;color: #343b40" class="bx bx-window-open"></i></a>
               </div>
               <div class="card-body bg-white">
@@ -48,6 +48,8 @@
 
 
 
+import store from "@/store";
+
 export default {
   name: 'Gallery',
   data(){
@@ -70,6 +72,13 @@ export default {
 
       var element = this.$els[refName];
       element.scrollIntoView();
+
+    },
+    addToCart(name, src) {
+      let cart = JSON.parse(localStorage.getItem('cartTindo'));
+      cart.push({name:name, src:src});
+      localStorage.setItem('cartTindo',JSON.stringify(cart));
+      store.commit('updateCount',cart.length);
 
     }
   }

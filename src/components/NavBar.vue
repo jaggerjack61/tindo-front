@@ -39,7 +39,7 @@ badge badge-warning
 "
                                                                                       id="
 lblCartCount
-">{{cartQuantity}}</span></a></span>
+">{{$store.state.cartCount}}</span></a></span>
 
       </div>
     </div>
@@ -81,6 +81,8 @@ lblCartCount
 
 
 
+import store from "@/store";
+
 export default {
   name: 'NavBar',
   data(){
@@ -90,7 +92,7 @@ export default {
   },
   created() {
     if(!localStorage.getItem('cartTindo')) {
-      localStorage.setItem('cartTindo',JSON.stringify([{'name':'nothing','src':'nada'}]));
+      localStorage.setItem('cartTindo',JSON.stringify([]));
     }
 
   },
@@ -107,7 +109,7 @@ export default {
     getCartAmount() {
       let cart = JSON.parse(localStorage.getItem('cartTindo'));
       this.cartQuantity = cart.length;
-      console.log(cart);
+      store.commit('updateCount',cart.length);
     }
   }
 }
