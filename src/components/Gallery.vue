@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section id="portfolio" class="portfolio bg-opacity-10" style='background: url("assets/img/bg.jpg") fixed;'>
+    <section id="portfolio" class="portfolio bg-opacity-10" style='background: url("assets/img/bg-min.jpg") fixed;'>
       <div class="container" data-aos="fade-up">
         <div class="section-header bg-white rounded bg-opacity-90">
           <h3 class="section-title p-3 text-secondary">Gallery</h3>
@@ -11,16 +11,20 @@
         <div  class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
 
           <div v-for="painting in paintings" class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="card p-1" style=".card:hover .card-body{display: block}">
+            <div class="card" style=".card:hover .card-body{display: block}">
 
               <img class="card-img-top" :src="painting.src" style="width:100%;height:300px;object-fit:cover;" alt="image">
               <div class="card-img-overlay d-flex justify-content-end">
-                <a style="height: fit-content" @click="addToCart(painting.name, painting.src, painting.id,painting.price)"  data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 2em;color:#00b3ff" class="bx bx-cart-add"></i></a>
-                <a style="height: fit-content" :href="painting.src" class="details-link m-1 bg-white bg-opacity-75 rounded" title="More Details"><i style="font-size: 2em;color: #343b40" class="bx bx-window-open"></i></a>
+                <a style="height: fit-content;" @click="addToCart(painting.name, painting.src, painting.id,painting.price)" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 1.75em;color:#00b3ff;" class="bx bx-cart-add"></i></a>
+                <a style="height: fit-content" :href="painting.src" class="details-link m-1 bg-white bg-opacity-75 rounded" title="More Details"><i style="font-size: 1.75em;color: #343b40" class="bx bx-window-open"></i></a>
               </div>
-              <div class="card-body bg-white">
+              <div class="card-body bg-white bg-opacity-90">
                 <h5 class="card-title">{{painting.name}}</h5>
-                <p class="card-text">{{painting.description}}</p>
+                <hr/>
+
+                <span class="card-text align-content-start">{{painting.description}}</span>
+                <span class="align-content-end mx-5 bg-info rounded">${{painting.price}}</span>
+
 
               </div>
             </div>
@@ -56,10 +60,10 @@ export default {
     return {
       msg:"hie",
       paintings:[
-        {name:'Sunset', description: 'Abstract Sunset',src:'assets/img/gallery/1.png', id:1, price:99.99},
-        {name:'Vase in the void', description: 'Painting of a vase',src:'assets/img/gallery/2.png', id:2, price:299.99},
-        {name:'Born to be Together', description: 'Painting of Love',src:'assets/img/gallery/3.png', id:3, price:59.99},
-        {name:'Deadly Flowers', description: 'Flowers that kill',src:'assets/img/gallery/4.png', id:4, price:80.00}
+        {name:'Sunset', description: 'Abstract Sunset',src:'assets/img/gallery/1.webp', id:1, price:99.99},
+        {name:'Vase in the void', description: 'Painting of a vase',src:'assets/img/gallery/2.webp', id:2, price:299.99},
+        {name:'Born to be Together', description: 'Painting of Love',src:'assets/img/gallery/3.webp', id:3, price:59.99},
+        {name:'Deadly Flowers', description: 'Flowers that kill',src:'assets/img/gallery/4.webp', id:4, price:80.00}
       ],
       count:1
     }
