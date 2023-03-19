@@ -53,6 +53,8 @@
 
 
 import store from "@/store";
+import {toast} from "vue3-toastify";
+import 'vue3-toastify/dist/index.css';
 
 export default {
   name: 'Gallery',
@@ -80,10 +82,18 @@ export default {
     },
     addToCart(name, src, id,price) {
       let cart = JSON.parse(localStorage.getItem('cartTindo'));
-      cart.push({name:name, src:src, id:id, price:price});
-      localStorage.setItem('cartTindo',JSON.stringify(cart));
-      store.commit('updateCount',cart.length);
-      store.commit('addToCart',cart)
+      const cartItem = cart.filter(item => { return item.id === id});
+      console.log(cartItem);
+      if(cartItem.length>0){
+        toast.info(name+' is already in the cart.',{autoClose:2000});
+      }
+      else {
+        cart.push({name: name, src: src, id: id, price: price});
+        localStorage.setItem('cartTindo', JSON.stringify(cart));
+        store.commit('updateCount', cart.length);
+        store.commit('addToCart', cart)
+        toast.success(name + ' successfully added to cart.', {autoClose: 2000});
+      }
 
     }
   }

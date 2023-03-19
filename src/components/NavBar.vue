@@ -3,7 +3,20 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><h2>Tindo</h2></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span><span style="
+  position: relative;
+  top: -10px;
+  right: 10px;
+  padding: 3px 3px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;"
+                                                       class="
+badge badge-warning
+"
+                                                       id="
+lblCartCount
+">{{$store.state.cartCount}}</span>
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
         <!-- Use navbar-nav class on ul element -->
