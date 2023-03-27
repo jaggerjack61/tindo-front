@@ -11,9 +11,9 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="row" v-for="item in $store.state.cart">
+          <div class="row my-2" v-for="item in $store.state.cart">
             <div class="col-3">
-            <img :src="item.src" style="width:50%;" />
+            <img :src="item.src" style="width:100%;" />
             </div>
             <div class="col-5">
               <span> {{item.name}}</span>

@@ -10,24 +10,42 @@
 
         <div  class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
 
-          <div v-for="painting in paintings" class="col-lg-4 col-md-6 portfolio-item filter-app">
+          <div v-for="painting in paintings" class="col-4 portfolio-item filter-app">
             <div class="card" style=".card:hover .card-body{display: block}">
 
-              <img class="card-img-top" :src="painting.src" style="width:100%;height:300px;object-fit:cover;" alt="image">
+              <img class="card-img-top" :src="assets+painting.url" style="width:100%;height:300px;object-fit:cover;" alt="image">
               <div class="card-img-overlay d-flex justify-content-end">
-                <a style="height: fit-content;" @click="addToCart(painting.name, painting.src, painting.id,painting.price)" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 1.75em;color:#00b3ff;" class="bx bx-cart-add"></i></a>
-                <a style="height: fit-content" :href="painting.src" class="details-link m-1 bg-white bg-opacity-75 rounded" title="More Details"><i style="font-size: 1.75em;color: #343b40" class="bx bx-window-open"></i></a>
+                <a style="height: fit-content;" @click="addToCart(painting.name, assets+painting.url, painting.id,painting.price)" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 1.75em;color:#00b3ff;" class="bx bx-cart-add"></i></a>
+                <a style="height: fit-content" :href="assets+painting.url" class="details-link m-1 bg-white bg-opacity-75 rounded" title="More Details"><i style="font-size: 1.75em;color: #343b40" class="bx bx-window-open"></i></a>
               </div>
               <div class="card-body bg-white bg-opacity-90">
-                <h5 class="card-title">{{painting.name}}</h5>
+                <div class="card-title">
+                  <div class="row">
+                    <div class="col-4">
+                      <span class="align-content-start">{{painting.type}}</span>
+                    </div>
+                    <div class="col-4">
+                      {{painting.name}}
+                    </div>
+                    <div class="col-4">
+                      <span class="align-content-end rounded bg-black text-white">{{painting.dimensions}}</span>
+                    </div>
+                  </div>
+                </div>
                 <hr/>
 
                 <span class="card-text align-content-start">{{painting.description}}</span>
-                <span class="align-content-end mx-5 bg-info rounded">${{painting.price}}</span>
+                <span v-if="painting.status !=='sold'" class="align-content-end mx-5 bg-info rounded">${{painting.price}}</span>
+                <span v-if="painting.status ==='sold'" class="align-content-end mx-5 bg-danger rounded">SOLD</span>
+
 
 
               </div>
+
             </div>
+
+            <a href="" class="btn btn-primary float-start my-2">Enquire</a>
+
 <!--            <img :src="painting.src" class="img-fluid" alt="" style="width:100%;height:300px;object-fit:cover;">-->
 <!--            <div class="portfolio-info">-->
 <!--              <h4>{{painting.name}}</h4>-->
@@ -55,18 +73,35 @@
 import store from "@/store";
 import {toast} from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
+import axios from "axios";
+
 
 export default {
   name: 'Gallery',
+
+  mounted() {
+
+    console.log(this.api);
+    axios.get(this.api+'gallery')
+        .then( (response) => {
+
+          this.paintings = response.data;
+          console.log(this.paintings);
+
+        })
+        .catch((error) => {
+          toast.warning('Failed to create table.',{autoClose:2000});
+          console.log(error);
+        });
+
+
+  },
   data(){
     return {
       msg:"hie",
-      paintings:[
-        {name:'Sunset', description: 'Abstract Sunset',src:'assets/img/gallery/1.webp', id:1, price:99.99},
-        {name:'Vase in the void', description: 'Painting of a vase',src:'assets/img/gallery/2.webp', id:2, price:299.99},
-        {name:'Born to be Together', description: 'Painting of Love',src:'assets/img/gallery/3.webp', id:3, price:59.99},
-        {name:'Deadly Flowers', description: 'Flowers that kill',src:'assets/img/gallery/4.webp', id:4, price:80.00}
-      ],
+      api:process.env.VUE_APP_BACKEND.toString(),
+      assets:process.env.VUE_APP_ASSETS.toString(),
+      paintings:[],
       count:1
     }
   },
@@ -111,7 +146,7 @@ export default {
 }
 
 /* Slide up the card body on hover */
-.card:hover .card-body {
+.portfolio-item:hover .card-body {
   bottom: 0;
   opacity: 1;
   /* Add a transition effect */
