@@ -10,13 +10,13 @@
 
         <div  class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
 
-          <div v-for="painting in paintings" class="col-4 portfolio-item filter-app">
+          <div v-for="painting in paintings" class="col-lg-4 col-sm-12 col-md-6 portfolio-item filter-app">
             <div class="card" style=".card:hover .card-body{display: block}">
 
               <img class="card-img-top" :src="assets+painting.url" style="width:100%;height:300px;object-fit:cover;" alt="image">
               <div class="card-img-overlay d-flex justify-content-end">
                 <a style="height: fit-content;" @click="addToCart(painting.name, assets+painting.url, painting.id,painting.price)" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 1.75em;color:#00b3ff;" class="bx bx-cart-add"></i></a>
-                <a style="height: fit-content" :href="assets+painting.url" class="details-link m-1 bg-white bg-opacity-75 rounded" title="More Details"><i style="font-size: 1.75em;color: #343b40" class="bx bx-window-open"></i></a>
+                <a @click="enquireModal(painting)" data-bs-toggle="modal" data-bs-target="#viewPaintingModal" style="height: fit-content" :href="assets+painting.url" class="details-link m-1 bg-white bg-opacity-75 rounded" title="More Details"><i style="font-size: 1.75em;color: #343b40" class="bx bx-window-open"></i></a>
               </div>
               <div class="card-body bg-white bg-opacity-90">
                 <div class="card-title">
@@ -44,7 +44,7 @@
 
             </div>
 
-            <a href="" class="btn btn-primary float-start my-2">Enquire</a>
+            <a href="" @click="enquireModal(painting)" class="btn btn-primary float-start my-2" data-bs-toggle="modal" data-bs-target="#enquiryModal">Enquire</a>
 
 <!--            <img :src="painting.src" class="img-fluid" alt="" style="width:100%;height:300px;object-fit:cover;">-->
 <!--            <div class="portfolio-info">-->
@@ -63,6 +63,67 @@
       </div>
     </section><!-- End Portfolio Section -->
 
+    <div class="modal fade" id="enquiryModal"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Painting Enquiry</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="form" @submit.prevent="enquire(enqPainting.name)">
+          <form action="" method="post" role="form" >
+          <div class="modal-body">
+            <div class="row my-5">
+              <div class="col-4">
+                <img :src="assets+enqPainting.url" style="width:100%;" />
+              </div>
+              <div class="col-4">
+                <span> {{enqPainting.name}}</span>
+              </div>
+              <div class="col-4">
+                <span> {{enqPainting.type}}</span>
+              </div>
+            </div>
+
+                <label for="enq_name">Your Name</label>
+                <input type="text" v-model="xname" name="enq_name" class="form-control" id="enq_name" placeholder="Name" required />
+                <label for="enq_email">Your Email</label>
+                <input v-model="xemail" type="email" name="enq_email" class="form-control" id="enq_email" placeholder="Email" required />
+                <label for="enq_message">Your Message</label>
+                <textarea v-model="xmessage" rows="5" name="enq_message" class="form-control" id="enq_message" placeholder="Message" required />
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button v-if="!loading" type="submit" class="btn btn-sm btn-primary">Send</button>
+            <button v-if="loading" class="btn btn-sm btn-primary">Loading</button>
+
+
+          </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal modal-lg fade bg-black bg-opacity-90" id="viewPaintingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{enqPainting.name}}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <img class="card-img-top" :src="assets+enqPainting.url">
+            <p>{{enqPainting.description}}</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -99,10 +160,15 @@ export default {
   data(){
     return {
       msg:"hie",
-      api:process.env.VUE_APP_BACKEND.toString(),
-      assets:process.env.VUE_APP_ASSETS.toString(),
+      api:store.state.api,
+      assets:store.state.assets,
       paintings:[],
-      count:1
+      count:1,
+      xname:'',
+      xemail:'',
+      xmessage:'',
+      loading:false,
+      enqPainting:{url:''}
     }
   },
   created() {
@@ -130,6 +196,30 @@ export default {
         toast.success(name + ' successfully added to cart.', {autoClose: 2000});
       }
 
+    },
+    enquire(subject) {
+      this.loading = true;
+      axios.post(this.api+"message",{
+        name:this.xname,
+        email:this.xemail,
+        subject:'Enquiry:'+subject,
+        message:this.xmessage}).then((response)=>{
+        if(response.data.message === "success"){
+          toast.success('Message  has been sent.',{autoClose:5000});
+        }
+        else{
+          toast.warning('Message could not be sent.',{autoClose:5000});
+        }
+
+      }).catch((error)=>{
+        toast.warning('Message could not be sent.',{autoClose:5000});
+      });
+      this.loading = false;
+
+    },
+    enquireModal(painting) {
+      this.enqPainting = painting;
+      console.log(this.assets+this.enqPainting.url);
     }
   }
 }

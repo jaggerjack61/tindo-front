@@ -4,7 +4,9 @@ export default createStore({
   state: {
     route:null,
     cart:null,
-    cartCount:0
+    cartCount:0,
+    api:process.env.VUE_APP_BACKEND,
+    assets:process.env.VUE_APP_ASSETS
     
   },
   getters: {

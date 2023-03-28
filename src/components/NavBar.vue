@@ -1,5 +1,6 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-opacity-25 fixed-top pt-1" style="background:#2c3e50;">
+  <nav class="navbar navbar-expand-lg bg-opacity-90 bg-secondary fixed-top pt-1" >
+<!--       style="background:#2c3e50;">-->
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><h2>Tindo</h2></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
