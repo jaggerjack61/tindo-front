@@ -35,9 +35,20 @@ lblCartCount
         <span class="nav-item pt-2 mx-3">
           <RouterLink :to="{name:'contact'}" class="nav-link">Contact Me</RouterLink>
         </span>
-        <span class="nav-item pt-2 mx-3 p-0">
+        <span v-if="!$store.state.user" class="nav-item pt-2 mx-3 p-0">
           <RouterLink :to="{name:'auth'}" class="nav-link">Login|Register</RouterLink>
         </span>
+        <span v-if="$store.state.user" class="nav-item dropdown pt-2 mx-3 p-0">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+         {{$store.state.user.name}}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><a class="dropdown-item" href="#">My Purchases</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" @click="logout">Logout</a></li>
+        </ul>
+          </span>
         <span class="pt-2 mx-3">
         <a href="#portfolio" data-bs-toggle="modal" data-bs-target="#exampleModal"><i style="font-size: 2em;" class="bx bxs-cart"></i><span style="
   position: relative;
@@ -97,6 +108,7 @@ lblCartCount
 
 import store from "@/store";
 import Cart from "@/components/Cart.vue";
+import axios from "axios";
 
 export default {
   name: 'NavBar',
@@ -116,6 +128,27 @@ export default {
   },
   mounted() {
     this.getCartAmount();
+    if(!store.state.user){
+
+      let token = JSON.parse(localStorage.getItem('token'));
+      if(token){
+
+
+          axios.get(store.state.api+'user',{headers:{'Authorization':'Bearer '+token.plaintext}})
+              .then(response => {
+                if(response.data.message === 'success'){
+                  store.commit('setUser',response.data.user);
+                  console.log(response)
+                }
+                else{
+                  localStorage.setItem('token', null);
+                }
+
+              }).catch(error =>{
+                console.log(error);
+              });
+      }
+    }
   },
   methods:{
     scrollMeTo(refName) {
@@ -128,6 +161,10 @@ export default {
       let cart = JSON.parse(localStorage.getItem('cartTindo'));
       this.cartQuantity = cart.length;
       store.commit('updateCount',cart.length);
+    },
+    logout() {
+      localStorage.setItem('token', null);
+      store.commit('setUser',null);
     }
   }
 }

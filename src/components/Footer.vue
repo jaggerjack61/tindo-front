@@ -9,10 +9,10 @@
 
       <div class="container">
         <div class="copyright">
-          &copy; Copyright <strong>Tendai Jarayi</strong>. All Rights Reserved
+          &copy; Copyright {{year}}<strong> Tendai Jarayi</strong>. All Rights Reserved
         </div>
         <div class="credits">
-          Developed by <a href="https://softdev.co.zw/">SoftSev</a>
+          Developed by <a href="https://softdev.co.zw/">SoftDev</a>
         </div>
       </div>
     </footer>
@@ -27,8 +27,12 @@ export default {
   name: 'Footer',
   data(){
     return {
-      msg:"hie"
+      year:null
     }
+  },
+  mounted() {
+    let currDate = new Date();
+    this.year = currDate.getFullYear();
   },
   methods:{
     scrollMeTo(refName) {

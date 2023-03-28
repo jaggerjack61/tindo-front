@@ -6,7 +6,9 @@ export default createStore({
     cart:null,
     cartCount:0,
     api:process.env.VUE_APP_BACKEND,
-    assets:process.env.VUE_APP_ASSETS
+    assets:process.env.VUE_APP_ASSETS,
+    user:null,
+
     
   },
   getters: {
@@ -23,6 +25,9 @@ export default createStore({
     },
     setRoute(state, route) {
       state.route = route;
+    },
+    setUser(state, user) {
+      state.user = user;
     }
   },
   actions: {

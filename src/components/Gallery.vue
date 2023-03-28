@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section id="portfolio" class="portfolio bg-opacity-10" style='background: url("assets/img/bg-min.jpg") fixed;'>
+    <section id="portfolio" class="portfolio bg-opacity-10" style='background: url("assets/img/a2.webp") fixed;'>
       <div class="container" data-aos="fade-up">
         <div class="section-header bg-white rounded bg-opacity-90">
           <h3 class="section-title p-3 text-secondary">Gallery</h3>
@@ -15,7 +15,7 @@
 
               <img class="card-img-top" :src="assets+painting.url" style="width:100%;height:300px;object-fit:cover;" alt="image">
               <div class="card-img-overlay d-flex justify-content-end">
-                <a style="height: fit-content;" @click="addToCart(painting.name, assets+painting.url, painting.id,painting.price)" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 1.75em;color:#00b3ff;" class="bx bx-cart-add"></i></a>
+                <a v-if="painting.status !== 'sold'" style="height: fit-content;" @click="addToCart(painting.name, assets+painting.url, painting.id,painting.price)" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i style="font-size: 1.75em;color:#00b3ff;" class="bx bx-cart-add"></i></a>
                 <a @click="enquireModal(painting)" data-bs-toggle="modal" data-bs-target="#viewPaintingModal" style="height: fit-content" :href="assets+painting.url" class="details-link m-1 bg-white bg-opacity-75 rounded" title="More Details"><i style="font-size: 1.75em;color: #343b40" class="bx bx-window-open"></i></a>
               </div>
               <div class="card-body bg-white bg-opacity-90">
@@ -44,7 +44,7 @@
 
             </div>
 
-            <a href="" @click="enquireModal(painting)" class="btn btn-primary float-start my-2" data-bs-toggle="modal" data-bs-target="#enquiryModal">Enquire</a>
+            <a href="" @click="enquireModal(painting)" class="btn bg-black text-white float-start my-2" data-bs-toggle="modal" data-bs-target="#enquiryModal">Enquire</a>
 
 <!--            <img :src="painting.src" class="img-fluid" alt="" style="width:100%;height:300px;object-fit:cover;">-->
 <!--            <div class="portfolio-info">-->
