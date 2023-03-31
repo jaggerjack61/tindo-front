@@ -3,7 +3,7 @@
     <NavBar />
     <section id="hero">
       <div class="hero-container" data-aos="zoom-in" data-aos-delay="100">
-        <h1>Welcome to Tindo's Gallery</h1>
+        <h1>Welcome to Tendai's Gallery</h1>
         <h5 style="color: white">Scroll down to find out what drives my art.</h5>
         <RouterLink :to="{name:'gallery'}" href="#about" class="btn-get-started">View Gallery</RouterLink>
       </div>

@@ -1,8 +1,10 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import GalleryView from "../views/GalleryView.vue";
 import ContactView from "@/views/ContactView.vue";
 import AuthView from "@/views/AuthView.vue";
+import ProfileView from "@/views/ProfileView.vue";
+import PurchasesView from "@/views/PurchasesView.vue";
 
 const routes = [
   {
@@ -26,6 +28,16 @@ const routes = [
     component: AuthView
   },
   {
+    path: '/profile',
+    name: 'profile',
+    component: ProfileView
+  },
+  {
+    path: '/purchases',
+    name: 'purchases',
+    component: PurchasesView
+  },
+  {
     path: '/home#about',
     name: 'about',
     component: HomeView
@@ -42,7 +54,7 @@ const routes = [
 
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes
   // mode:'history'
 })

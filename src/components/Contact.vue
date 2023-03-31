@@ -44,11 +44,21 @@
           <div class="col-lg-5 col-md-8">
             <div class="form" @submit.prevent="sendMessage">
               <form action="" method="post" role="form" class="php-email-form">
+                <div v-if="$store.state.user">
                 <div class="form-group">
-                  <input type="text" name="name" v-model="name" class="form-control" id="name" placeholder="Your Name" required>
+                  <input type="text" :value="$store.state.user.name" name="name" class="form-control" id="name" placeholder="Your Name" readonly />
                 </div>
                 <div class="form-group mt-3">
-                  <input type="email" class="form-control" v-model="email" name="email" id="email" placeholder="Your Email" required>
+                  <input type="email" :value="$store.state.user.email" class="form-control" name="email" id="email" placeholder="Your Email" readonly />
+                </div>
+                </div>
+                <div v-if="!$store.state.user">
+                  <div class="form-group">
+                    <input type="text" name="name" v-model="name" class="form-control" id="name" placeholder="Your Name" required>
+                  </div>
+                  <div class="form-group mt-3">
+                    <input type="email" class="form-control" v-model="email" name="email" id="email" placeholder="Your Email" required>
+                  </div>
                 </div>
                 <div class="form-group mt-3">
                   <input type="text" class="form-control" v-model="subject" name="subject" id="subject" placeholder="Subject" required>
@@ -63,7 +73,7 @@
                 </div>
                 <div class="text-center">
                   <button v-if="!loading" type="submit" class="btn btn-primary">Send Message</button>
-                  <button v-if="loading" class="btn btn-primary">Please wait..</button>
+                  <button v-if="loading" class="btn btn-lg text-white" style="background: #2dc997">Please wait..</button>
                 </div>
               </form>
             </div>
@@ -83,9 +93,15 @@
 import axios from "axios";
 import {toast} from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
+import store from "@/store";
 
 export default {
   name: 'Contact',
+  computed: {
+    store() {
+      return store
+    }
+  },
   mounted() {
 
   },
@@ -95,18 +111,19 @@ export default {
       email:'',
       subject:'',
       message:'',
-      loading:false,
+      loading: false,
       api:process.env.VUE_APP_BACKEND
     }
   },
   methods:{
-    sendMessage() {
+    async sendMessage() {
       this.loading = true;
-      axios.post(this.api+"message",{
-        name:this.name,
-        email:this.email,
+      await axios.post(this.api+"message",{
+        name: (store.state.user) ? store.state.user.name : this.name,
+        email: (store.state.user) ? store.state.user.email : this.email,
         subject:this.subject,
         message:this.message}).then((response)=>{
+        this.loading = false;
         if(response.data.message === "success"){
           toast.success('Message is has been sent.',{autoClose:5000});
         }
@@ -115,9 +132,10 @@ export default {
         }
 
       }).catch((error)=>{
+        this.loading = false;
         toast.warning('Message could not be sent2.',{autoClose:5000});
       });
-      this.loading = false;
+
     }
   }
 }

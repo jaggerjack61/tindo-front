@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg bg-opacity-90 bg-secondary fixed-top pt-1" >
 <!--       style="background:#2c3e50;">-->
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><h2>Tindo</h2></a>
+      <RouterLink :to="{name:'home'}" class="navbar-brand" href="#"><h2>Tendai Jarayi</h2></RouterLink>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span><span style="
   position: relative;
@@ -43,8 +43,8 @@ lblCartCount
          {{$store.state.user.name}}
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#">Profile</a></li>
-          <li><a class="dropdown-item" href="#">My Purchases</a></li>
+          <li><RouterLink :to="{name:'profile'}" class="dropdown-item" >Profile</RouterLink></li>
+          <li><RouterLink :to="{name:'purchases'}" class="dropdown-item" >My Purchases</RouterLink></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" @click="logout">Logout</a></li>
         </ul>
@@ -109,6 +109,8 @@ lblCartCount
 import store from "@/store";
 import Cart from "@/components/Cart.vue";
 import axios from "axios";
+import {toast} from "vue3-toastify";
+import 'vue3-toastify/dist/index.css';
 
 export default {
   name: 'NavBar',
@@ -165,6 +167,7 @@ export default {
     logout() {
       localStorage.setItem('token', null);
       store.commit('setUser',null);
+      this.$router.push({ name: 'home' })
     }
   }
 }
