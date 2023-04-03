@@ -183,16 +183,13 @@ export default {
     },
     addToCart(name, src, id,price) {
       let cart = JSON.parse(localStorage.getItem('cartTindo'));
-<<<<<<< HEAD
+
       if(!cart){
         cart = [];
       }
-      const cartItem = cart.filter(item => {
-        return item.id === id
-      });
-=======
+
       const cartItem = cart.filter(item => { return item.id === id});
->>>>>>> parent of 2c00c42 (now uses user data for contact forms)
+
       console.log(cartItem);
       if(cartItem.length>0){
         toast.info(name+' is already in the cart.',{autoClose:2000});
