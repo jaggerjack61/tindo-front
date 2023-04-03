@@ -22,8 +22,7 @@
             <label for="password">Password</label>
             <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
           </div>
-          <button v-if="!loading" type="submit" class="btn btn-primary my-3">Login</button>
-          <button v-if="loading"  class="btn btn-primary my-3">Please wait...</button>
+          <button type="submit" class="btn btn-primary my-3">Login</button>
         </form>
       </div>
       <div class="tab-pane fade show active small my-5" role="tabpanel" v-if="showRegisterTab">
@@ -41,8 +40,7 @@
             <label for="password">Password</label>
             <input v-model="regPassword" type="password" class="form-control" id="password" placeholder="Password">
           </div>
-          <button v-if="!loading" type="submit" class="btn btn-info my-3">Register</button>
-          <button v-if="loading"  class="btn btn-info my-3">Please wait...</button>
+          <button type="submit" class="btn btn-info my-3">Register</button>
         </form>
       </div>
     </div>
@@ -67,8 +65,7 @@ export default {
       regEmail:'',
       regPassword:'',
       email:'',
-      password:'',
-      loading:false
+      password:''
     };
   },
   methods: {
@@ -81,46 +78,35 @@ export default {
       this.showRegisterTab = true;
     },
     async register(){
-      this.loading = true;
       await axios.post(store.state.api+'register', {
         name:this.regName,
         email:this.regEmail,
         password:this.regPassword
       }).then(response => {
-        this.loading = false;
         if(response.data.message === 'success'){
           console.log('user created');
           toast.success('User created')
-          this.email = this.regEmail;
-          this.password = this.regPassword;
-          this.login();
         }
         else{
           console.log('some shit went down')
           toast.warning('user could not be created');
         }
       }).catch(error => {
-        this.loading = false;
         toast.warning('user could not be created');
         console.log(error);
       })
     },
     async login() {
-      this.loading = true;
       await axios.post(store.state.api+'login',{
         email:this.email,
         password:this.password
       }).catch(error => {
         console.log(error);
-        this.loading = false;
       }).then(response => {
-        this.loading = false;
-
         if(response.data.message === 'success'){
           localStorage.setItem('token', JSON.stringify({plaintext:response.data.token}));
           store.commit('setUser', response.data.user);
           console.log('logged in');
-          this.$router.push({ name: 'gallery' })
         }
         else{
           console.log('log in failed');
