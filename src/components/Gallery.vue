@@ -17,7 +17,7 @@
                    alt="image">
               <div class="card-img-overlay d-flex justify-content-end">
                 <a v-if="painting.status !== 'sold'" style="height: fit-content;"
-                   @click="addToCart(painting.name, assets+painting.url, painting.id,painting.price)"
+                   @click="addToCart(painting.name, painting.url, painting.id,painting.price)"
                    data-gallery="portfolioGallery"
                    class="portfolio-lightbox preview-link m-1 bg-white bg-opacity-75 rounded" title="Add to Cart"><i
                     style="font-size: 1.75em;color:#00b3ff;" class="bx bx-cart-add"></i></a>
@@ -97,7 +97,8 @@
                   <input type="text" :value="$store.state.user.name" name="enq_name" class="form-control" id="enq_name"
                          placeholder="Name" readonly/>
                   <label for="enq_email">Your Email</label>
-                  <input :value="$store.state.user.email" type="email" name="enq_email" class="form-control" id="enq_email"
+                  <input :value="$store.state.user.email" type="email" name="enq_email" class="form-control"
+                         id="enq_email"
                          placeholder="Email" readonly/>
                 </div>
                 <div v-if="!$store.state.user">
@@ -166,10 +167,7 @@ export default {
     console.log(this.api);
     axios.get(this.api + 'gallery')
         .then((response) => {
-
           this.paintings = response.data;
-          console.log(this.paintings);
-
         })
         .catch((error) => {
           toast.warning('You are offline. Check your internet connection.', {autoClose: 2000});
@@ -189,13 +187,30 @@ export default {
       xemail: '',
       xmessage: '',
       loading: false,
-      enqPainting: {url: ''}
+      enqPainting: {url: ''},
+      newCart: []
     }
   },
   created() {
     this.count += parseInt(this.paintings.length / 3)
   },
   methods: {
+    removeById(id) {
+      return function (obj) {
+        return obj.id !== id;
+      };
+    },
+    removeItem(id) {
+      console.log(id);
+      let newCart = store.state.cart.filter(item => {
+        return item.id !== id
+      });
+      console.log(newCart);
+      localStorage.setItem('cartTindo', JSON.stringify(newCart));
+      store.commit('updateCount', newCart.length);
+      store.commit('addToCart', newCart)
+
+    },
     scrollMeTo(refName) {
 
       var element = this.$els[refName];
@@ -211,12 +226,13 @@ export default {
       if (cartItem.length > 0) {
         toast.info(name + ' is already in the cart.', {autoClose: 2000});
       } else {
-        cart.push({name: name, src: src, id: id, price: price});
+        cart.push({name: name, url: src, id: id, price: price});
         localStorage.setItem('cartTindo', JSON.stringify(cart));
         store.commit('updateCount', cart.length);
         store.commit('addToCart', cart)
         toast.success(name + ' successfully added to cart.', {autoClose: 2000});
       }
+      this.totalAmount();
 
     },
     enquire(subject) {
@@ -244,6 +260,12 @@ export default {
     enquireModal(painting) {
       this.enqPainting = painting;
       console.log(this.assets + this.enqPainting.url);
+    },
+    totalAmount(){
+      let total = store.state.cart.reduce((total, item) =>{
+        return total+item.price;
+      },0);
+      store.commit('setCartTotal', total);
     }
   }
 }

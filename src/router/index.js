@@ -5,6 +5,7 @@ import ContactView from "@/views/ContactView.vue";
 import AuthView from "@/views/AuthView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import PurchasesView from "@/views/PurchasesView.vue";
+import CheckOutView from "@/views/CheckOutView.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/purchases',
     name: 'purchases',
     component: PurchasesView
+  },
+  {
+    path: '/checkout',
+    name: 'checkout',
+    component: CheckOutView
   },
   {
     path: '/home#about',

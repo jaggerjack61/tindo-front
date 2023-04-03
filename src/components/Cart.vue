@@ -13,7 +13,7 @@
         <div class="modal-body">
           <div class="row my-2" v-for="item in $store.state.cart">
             <div class="col-3">
-            <img :src="item.src" style="width:100%;" />
+            <img :src="assets+item.url" style="width:80px;height: 80px;" />
             </div>
             <div class="col-5">
               <span> {{item.name}}</span>
@@ -25,10 +25,19 @@
               <span><a @click="removeItem(item.id)"><i class="bx bx-eraser"></i></a></span>
             </div>
           </div>
+          <div class="row my-2">
+            <div class="col-6">
+              <span> Total:</span>
+            </div>
+
+            <div class="col-6">
+              <span>RTGS\ZWL ${{$store.state.cartTotal}}</span>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-sm btn-primary">Check Out</button>
+          <Button @click="showCheckOut" data-bs-dismiss="modal" class="btn btn-sm btn-primary">Check Out</Button>
         </div>
       </div>
     </div>
@@ -42,8 +51,14 @@ export default {
   name: 'Cart',
   data() {
     return {
+      assets:process.env.VUE_APP_ASSETS,
+
+
 
     }
+  },
+  created() {
+    this.totalAmount();
   },
   methods:{
     removeById(id) {
@@ -58,7 +73,17 @@ export default {
       localStorage.setItem('cartTindo',JSON.stringify(newCart));
       store.commit('updateCount',newCart.length);
       store.commit('addToCart', newCart)
+      this.totalAmount()
 
+    },
+    totalAmount(){
+      let total = store.state.cart.reduce((total, item) =>{
+        return total+item.price;
+      },0);
+      store.commit('setCartTotal', total);
+    },
+    showCheckOut() {
+      this.$router.push({ name: 'checkout' })
     }
   }
 }

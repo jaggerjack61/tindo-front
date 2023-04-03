@@ -9,8 +9,10 @@
       </div>
 
       <!-- Uncomment below if you wan to use dynamic maps -->
-      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d22864.11283411948!2d-73.96468908098944!3d40.630720240038435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew+York%2C+NY%2C+USA!5e0!3m2!1sen!2sbg!4v1540447494452" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
-
+      <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243102.0138138754!2d31.05685825!3d-17.816637600000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1931a4ee1bdddb35%3A0xa5143b9be5134f2f!2sHarare!5e0!3m2!1sen!2szw!4v1680541714145!5m2!1sen!2szw"
+          width="100%" height="360" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
       <div class="container mt-5">
         <div class="row justify-content-center">
 
@@ -36,7 +38,8 @@
             <div class="social-links">
               <a href="https://www.facebook.com/tendaijarayi/" class="facebook m-1"><i class="bi bi-facebook"></i></a>
               <a href="https://wa.me/263775200032" class="instagram m-1"><i class="bi bi-whatsapp"></i></a>
-              <a href="https://www.linkedin.com/in/tendai-jarayi-1420b68b/?originalSubdomain=zw" class="linkedin m-1"><i class="bi bi-linkedin"></i></a>
+              <a href="https://www.linkedin.com/in/tendai-jarayi-1420b68b/?originalSubdomain=zw" class="linkedin m-1"><i
+                  class="bi bi-linkedin"></i></a>
             </div>
 
           </div>
@@ -45,26 +48,32 @@
             <div class="form" @submit.prevent="sendMessage">
               <form action="" method="post" role="form" class="php-email-form">
                 <div v-if="$store.state.user">
-                <div class="form-group">
-                  <input type="text" :value="$store.state.user.name" name="name" class="form-control" id="name" placeholder="Your Name" readonly />
-                </div>
-                <div class="form-group mt-3">
-                  <input type="email" :value="$store.state.user.email" class="form-control" name="email" id="email" placeholder="Your Email" readonly />
-                </div>
+                  <div class="form-group">
+                    <input type="text" :value="$store.state.user.name" name="name" class="form-control" id="name"
+                           placeholder="Your Name" readonly/>
+                  </div>
+                  <div class="form-group mt-3">
+                    <input type="email" :value="$store.state.user.email" class="form-control" name="email" id="email"
+                           placeholder="Your Email" readonly/>
+                  </div>
                 </div>
                 <div v-if="!$store.state.user">
                   <div class="form-group">
-                    <input type="text" name="name" v-model="name" class="form-control" id="name" placeholder="Your Name" required>
+                    <input type="text" name="name" v-model="name" class="form-control" id="name" placeholder="Your Name"
+                           required>
                   </div>
                   <div class="form-group mt-3">
-                    <input type="email" class="form-control" v-model="email" name="email" id="email" placeholder="Your Email" required>
+                    <input type="email" class="form-control" v-model="email" name="email" id="email"
+                           placeholder="Your Email" required>
                   </div>
                 </div>
                 <div class="form-group mt-3">
-                  <input type="text" class="form-control" v-model="subject" name="subject" id="subject" placeholder="Subject" required>
+                  <input type="text" class="form-control" v-model="subject" name="subject" id="subject"
+                         placeholder="Subject" required>
                 </div>
                 <div class="form-group mt-3">
-                  <textarea class="form-control" v-model="message" name="message" rows="5" placeholder="Message" required></textarea>
+                  <textarea class="form-control" v-model="message" name="message" rows="5" placeholder="Message"
+                            required></textarea>
                 </div>
                 <div class="my-3">
                   <div class="loading">Loading</div>
@@ -73,7 +82,8 @@
                 </div>
                 <div class="text-center">
                   <button v-if="!loading" type="submit" class="btn btn-primary">Send Message</button>
-                  <button v-if="loading" class="btn btn-lg text-white" style="background: #2dc997">Please wait..</button>
+                  <button v-if="loading" class="btn btn-lg text-white" style="background: #2dc997">Please wait..
+                  </button>
                 </div>
               </form>
             </div>
@@ -87,7 +97,6 @@
 </template>
 
 <script>
-
 
 
 import axios from "axios";
@@ -105,35 +114,35 @@ export default {
   mounted() {
 
   },
-  data(){
+  data() {
     return {
-      name:'',
-      email:'',
-      subject:'',
-      message:'',
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
       loading: false,
-      api:process.env.VUE_APP_BACKEND
+      api: process.env.VUE_APP_BACKEND
     }
   },
-  methods:{
+  methods: {
     async sendMessage() {
       this.loading = true;
-      await axios.post(this.api+"message",{
+      await axios.post(this.api + "message", {
         name: (store.state.user) ? store.state.user.name : this.name,
         email: (store.state.user) ? store.state.user.email : this.email,
-        subject:this.subject,
-        message:this.message}).then((response)=>{
+        subject: this.subject,
+        message: this.message
+      }).then((response) => {
         this.loading = false;
-        if(response.data.message === "success"){
-          toast.success('Message is has been sent.',{autoClose:5000});
-        }
-        else{
-          toast.warning('Message could not be sent.1',{autoClose:5000});
+        if (response.data.message === "success") {
+          toast.success('Message is has been sent.', {autoClose: 5000});
+        } else {
+          toast.warning('Message could not be sent.1', {autoClose: 5000});
         }
 
-      }).catch((error)=>{
+      }).catch((error) => {
         this.loading = false;
-        toast.warning('Message could not be sent2.',{autoClose:5000});
+        toast.warning('Message could not be sent2.', {autoClose: 5000});
       });
 
     }

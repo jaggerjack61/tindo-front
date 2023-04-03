@@ -5,6 +5,7 @@ export default createStore({
     route:null,
     cart:null,
     cartCount:0,
+    cartTotal:0,
     api:process.env.VUE_APP_BACKEND,
     assets:process.env.VUE_APP_ASSETS,
     user:null,
@@ -28,6 +29,9 @@ export default createStore({
     },
     setUser(state, user) {
       state.user = user;
+    },
+    setCartTotal(state, total) {
+      state.cartTotal = total;
     }
   },
   actions: {
