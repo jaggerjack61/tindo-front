@@ -9,6 +9,7 @@ export default createStore({
     api:process.env.VUE_APP_BACKEND,
     assets:process.env.VUE_APP_ASSETS,
     user:null,
+    orderReference:null
 
     
   },
@@ -32,6 +33,9 @@ export default createStore({
     },
     setCartTotal(state, total) {
       state.cartTotal = total;
+    },
+    setOrderReference(state, ref) {
+      state.orderReference = ref;
     }
   },
   actions: {
