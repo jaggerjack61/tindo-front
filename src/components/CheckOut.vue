@@ -1,4 +1,18 @@
 <template>
+  <div v-if="transaction" class="cont">
+    <div v-if="transactionStatus === 'pending'">
+      <span>Loading transcation... </span>
+      <div class="spinner-border" style="width: 2rem; height: 2rem;" role="status">
+      </div>
+    </div>
+    <div v-if="transactionStatus === 'Paid'">
+      <span class="text-success">Your transaction was successful you will be redirected to your purchases soon. </span>
+    </div>
+    <div v-if="transactionStatus === 'Cancelled'">
+      <span class="text-danger">Unfortunately the transaction could not go through. </span>
+    </div>
+
+  </div>
   <div v-if="$store.state.user" class="mt-5 p-2">
     <div class="row mt-5">
       <div class="col-sm-6">
@@ -67,7 +81,7 @@
             <button v-if="method === 'none'" class="btn btn-secondary float-start">Make Payment</button>
             <div v-if="method !== 'none'">
               <button v-if="!loading" type="submit" class="btn btn-primary float-start">Make Payment</button>
-              <button v-if="loading" class="btn btn-lg text-white" style="background: #2dc997">Please wait..
+              <button v-if="loading" class="btn btn-primary float-start" style="background: #2dc997">Please wait..
               </button>
             </div>
 
@@ -86,6 +100,7 @@
 <script>
 import store from "@/store";
 import axios from "axios";
+import {toast} from "vue3-toastify";
 
 export default {
   name: 'CheckOut',
@@ -96,13 +111,16 @@ export default {
       address: '',
       method: 'none',
       phone: '',
-      configs:null
+      configs: null,
+      transaction: false,
+      transactionStatus: 'pending',
+      intfunc:null
 
     }
   },
   mounted() {
     let token = JSON.parse(localStorage.getItem('token'));
-    this.configs = {headers:{'Authorization':'Bearer '+token.plaintext}};
+    this.configs = {headers: {'Authorization': 'Bearer ' + token.plaintext}};
   },
   methods: {
     createOrder() {
@@ -135,26 +153,88 @@ export default {
           });
     },
     async mobilePayment() {
-
+      this.loading = true;
       await axios.post(store.state.api + 'paynow/mobile', this.createOrder(), this.configs)
           .then(response => {
             console.log(response)
-            setInterval(this.getStatus, 10000);
+            if (response.data.message === "success") {
+              this.transaction = true;
+              this.intfunc = setInterval(this.getStatus, 10000);
+            } else if (response.data.message === "invalid order") {
+              toast.warning('Some items in your cart may have already been sold or have had their details changes since you added them. Please empty your cart and select your items again.');
+            } else {
+              toast.warning('Something has gone wrong please contact us using the details on our contact us page.');
+            }
+
+            this.loading = false;
           })
           .catch(error => {
             console.log(error);
+            this.loading = false;
           });
     },
     async getStatus() {
       await axios.post(store.state.api + 'paynow/status', {reference: store.state.orderReference}, this.configs)
           .then(response => {
-            console.log(response)
+            let data = response.data;
+            if (data.message === 'success') {
+              if (data.payment !== null) {
+                if (data.payment.status === 'Paid') {
+                  this.transactionStatus = 'Paid';
+                  setTimeout(this.setPaid, 3000);
+                } else if (data.payment.status === 'Cancelled') {
+                  this.transactionStatus = 'Cancelled';
+                  setTimeout(this.setCancelled, 5000);
+                } else if (data.payment.status === 'pending') {
+                  console.log('nothing');
+                } else {
+                  this.transactionStatus = 'Unforeseen';
+                  setTimeout(this.setCancelled, 5000);
+                }
+                toast.success(data.payment.status);
+              } else {
+                toast.warning('no payment')
+              }
+            } else {
+              this.transactionStatus = 'Unforeseen';
+              setTimeout(this.setCancelled, 5000);
+            }
           })
           .catch(error => {
             console.log(error);
           });
+    },
+    setPending() {
+      this.$router.push({name: 'purchases'})
+    },
+    setPaid() {
+      setTimeout(()=> {
+        clearInterval(this.intfunc);
+      }, 1000)
+      this.$router.push({ name: 'purchases' });
+    },
+    setCancelled() {
+      this.transaction = false;
+      this.transactionStatus = 'pending';
+      setTimeout(()=> {
+        clearInterval(this.intfunc);
+      }, 1000);
     }
   }
 }
 
 </script>
+
+<style scoped>
+.cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+h1 {
+  font-size: 3em;
+  text-align: center;
+}
+</style>
