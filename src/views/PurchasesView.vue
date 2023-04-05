@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <Construction />
+    <Purchases />
     <Footer />
   </div>
 </template>
@@ -11,5 +11,6 @@
 import NavBar from "@/components/NavBar.vue";
 
 import Footer from "@/components/Footer.vue";
-import Construction from "@/components/Construction.vue";
+
+import Purchases from "@/components/Purchases.vue";
 </script>

@@ -143,13 +143,26 @@ export default {
       }
     },
     async bankPayment() {
-      await axios.post(store.state.api + 'paynow/bank', this.createOrder())
+      this.loading = true;
+      await axios.post(store.state.api + 'paynow/bank', this.createOrder(), this.configs)
           .then(response => {
             console.log(response)
-            setInterval(this.getStatus, 10000);
+            if (response.data.message === "success") {
+              this.transaction = true;
+
+              window.location.href = response.data.url;
+              this.intfunc = setInterval(this.getStatus, 10000);
+            } else if (response.data.message === "invalid order") {
+              toast.warning('Some items in your cart may have already been sold or have had their details changes since you added them. Please empty your cart and select your items again.');
+            } else {
+              toast.warning('Something has gone wrong please contact us using the details on our contact us page.');
+            }
+
+            this.loading = false;
           })
           .catch(error => {
             console.log(error);
+            this.loading = false;
           });
     },
     async mobilePayment() {
@@ -205,12 +218,15 @@ export default {
           });
     },
     setPending() {
-      this.$router.push({name: 'purchases'})
+      this.$router.push({name: 'purchases'});
     },
     setPaid() {
+      localStorage.setItem('cartTindo','[]');
+      store.commit('updateCount',0);
+      store.commit('addToCart', [])
       setTimeout(()=> {
         clearInterval(this.intfunc);
-      }, 1000)
+      }, 1000);
       this.$router.push({ name: 'purchases' });
     },
     setCancelled() {
