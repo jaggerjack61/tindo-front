@@ -36,6 +36,9 @@ export default createStore({
     },
     setOrderReference(state, ref) {
       state.orderReference = ref;
+    },
+    setUserName(state, name) {
+      state.user.name = name;
     }
   },
   actions: {

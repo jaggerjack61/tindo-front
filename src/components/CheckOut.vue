@@ -69,7 +69,7 @@
             <div class="form-group mt-3">
               <p>After clicking the make payment button you will be redirected to the paynow portal where you will be
                 able to complete
-                the payment process using your local RTGS\ZWL bank account. </p>
+                the payment process using your local RTGS\ZWL bank account. This can take up to 30 seconds. </p>
             </div>
           </div>
           <div class="my-3">
@@ -81,7 +81,7 @@
             <button v-if="method === 'none'" class="btn btn-secondary float-start">Make Payment</button>
             <div v-if="method !== 'none'">
               <button v-if="!loading" type="submit" class="btn btn-primary float-start">Make Payment</button>
-              <button v-if="loading" class="btn btn-primary float-start" style="background: #2dc997">Please wait..
+              <button v-if="loading" class="btn btn-primary float-start" style="background: #2dc997"><span class="spinner-border spinner-border-sm"></span> Please wait..
               </button>
             </div>
 

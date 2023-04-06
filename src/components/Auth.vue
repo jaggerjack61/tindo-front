@@ -23,7 +23,7 @@
             <input v-model="password" type="password" class="form-control" id="password" placeholder="Password">
           </div>
           <button v-if="!loading" type="submit" class="btn btn-primary my-3">Login</button>
-          <button v-if="loading"  class="btn btn-primary my-3">Please wait...</button>
+          <button v-if="loading"  class="btn btn-primary my-3"><span class="spinner-border spinner-border-sm"></span> Please wait...</button>
         </form>
       </div>
       <div class="tab-pane fade show active small my-5" role="tabpanel" v-if="showRegisterTab">
@@ -42,7 +42,7 @@
             <input v-model="regPassword" type="password" class="form-control" id="password" placeholder="Password">
           </div>
           <button v-if="!loading" type="submit" class="btn btn-info my-3">Register</button>
-          <button v-if="loading"  class="btn btn-info my-3">Please wait...</button>
+          <button v-if="loading"  class="btn btn-info my-3"><span class="spinner-border spinner-border-sm"></span> Please wait...</button>
         </form>
       </div>
     </div>

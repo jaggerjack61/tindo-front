@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <Construction />
+    <Profile />
     <Footer />
   </div>
 </template>
@@ -11,5 +11,5 @@
 import NavBar from "@/components/NavBar.vue";
 
 import Footer from "@/components/Footer.vue";
-import Construction from "@/components/Construction.vue";
+import Profile from "@/components/Profile.vue";
 </script>

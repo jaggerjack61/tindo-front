@@ -82,7 +82,7 @@
                 </div>
                 <div class="text-center">
                   <button v-if="!loading" type="submit" class="btn btn-primary">Send Message</button>
-                  <button v-if="loading" class="btn btn-lg text-white" style="background: #2dc997">Please wait..
+                  <button v-if="loading" class="btn btn-lg text-white" style="background: #2dc997"><span class="spinner-border spinner-border-sm"></span> Please wait..
                   </button>
                 </div>
               </form>
