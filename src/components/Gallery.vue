@@ -226,7 +226,7 @@ export default {
       if (cartItem.length > 0) {
         toast.info(name + ' is already in the cart.', {autoClose: 2000});
       } else {
-        cart.push({name: name, url: src, id: id, price: price});
+        cart.push({name: name, url: src, id: id, price: parseFloat(price)});
         localStorage.setItem('cartTindo', JSON.stringify(cart));
         store.commit('updateCount', cart.length);
         store.commit('addToCart', cart)
