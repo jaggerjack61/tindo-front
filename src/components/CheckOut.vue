@@ -192,7 +192,7 @@ export default {
             let data = response.data;
             if (data.message === 'success') {
               if (data.payment !== null) {
-                if (data.payment.status === 'Paid') {
+                if (data.payment.status === 'Paid' || data.payment.status === 'Awaiting Delivery') {
                   this.transactionStatus = 'Paid';
                   setTimeout(this.setPaid, 3000);
                 } else if (data.payment.status === 'Cancelled') {
